@@ -177,7 +177,13 @@ app.get('/games', async (req, res) => {
 
   for(let i = 0; i <= NUMBER_OF_DAYS_TO_SEARCH; i++){
     const nextDayGames = await getSoccerecoGames(i);
-    allSoccerecoGames = [...allSoccerecoGames, ...nextDayGames];
+    if(nextDayGames.length > 0){
+      if(nextDayGames.every(item => allSoccerecoGames.filter(game => game.url === item.url).length === 0)){
+        allSoccerecoGames = [...allSoccerecoGames, ...nextDayGames];
+      }else{
+        break;
+      }
+    }
   }
 
   const getMoreSoccerecoData = async (game) => {
